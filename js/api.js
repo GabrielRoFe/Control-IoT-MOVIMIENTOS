@@ -1,5 +1,5 @@
 // === Ajusta esta URL al host de tu backend Flask ===
-export const API_BASE_URL = "http://34.200.30.103:5000/api/iot-devices";
+export const API_BASE_URL = "http://http://127.0.0.1:5000/api/iot-devices";
 
 async function apiGet(path) {
   const res = await fetch(`${API_BASE_URL}${path}`, { method: "GET", mode: "cors" });
@@ -33,3 +33,4 @@ export async function fetchPublicIP() {
     return "0.0.0.0";
   }
 }
+
