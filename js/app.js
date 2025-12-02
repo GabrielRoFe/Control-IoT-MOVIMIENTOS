@@ -12,7 +12,7 @@ const MOVES = [
   { no: 8,  direccion: "Giro 90° derecha" },
   { no: 9,  direccion: "Giro 90° izquierda" },
   { no: 10, direccion: "Giro 360° derecha" },
-  { no: 11, direccion: "Giro 360° izquierda" },
+  { no: 11, direccion: "Giro 360° izquierda" }
 ];
 
 const el = {
@@ -22,7 +22,7 @@ const el = {
   msgArea: document.getElementById("msgArea"),
   lastStatusBadge: document.getElementById("lastStatusBadge"),
   lastTableBody: document.getElementById("lastTableBody"),
-  btnRefresh: document.getElementById("btnRefresh"),
+  btnRefresh: document.getElementById("btnRefresh")
 };
 
 function renderMoves() {
@@ -33,7 +33,7 @@ function renderMoves() {
     col.innerHTML = `
       <button class="btn btn-primary w-100" data-no="${m.no}" data-direccion="${m.direccion}">
         <div class="fw-bold">${m.direccion}</div>
-        <div class="small text-light-50">No: ${m.no}</div>
+        <div class="small opacity-50">No: ${m.no}</div>
       </button>
     `;
     el.movesGrid.appendChild(col);
@@ -43,10 +43,10 @@ function renderMoves() {
 
 async function onSendMove(ev) {
   const btn = ev.currentTarget;
-  const no = Number(btn.dataset.no);                  // status_clave
-  const direccion = btn.dataset.direccion;            // status_texto
+  const no = Number(btn.dataset.no);
+  const direccion = btn.dataset.direccion;
   const name = (el.name.value || "WebClient").trim();
-  const ip = (el.ip.value || "0.0.0.0").trim();       // autocompletada
+  const ip = (el.ip.value || "0.0.0.0").trim();
 
   setMessage("Enviando comando...", "info");
   setButtonsDisabled(true);
@@ -55,8 +55,8 @@ async function onSendMove(ev) {
     const payload = {
       name,
       ip,
-      status_clave: no,         // No (1..11)
-      status_texto: direccion,  // Dirección (texto)
+      status_clave: no,
+      status_texto: direccion
     };
     await insertStatus(payload);
     setMessage(`Comando enviado: ${direccion}`, "success");
@@ -79,7 +79,13 @@ function setMessage(text, type = "secondary") {
 }
 
 function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[c]));
+  return String(s).replace(/[&<>"']/g, (c) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  }[c]));
 }
 
 function parseError(err) {
@@ -95,7 +101,7 @@ async function refreshLastStatus() {
     const res = await getLastStatusTexto();
     el.lastStatusBadge.className = "badge text-bg-primary";
     el.lastStatusBadge.textContent = res.status_texto || "—";
-  } catch (err) {
+  } catch {
     el.lastStatusBadge.className = "badge text-bg-danger";
     el.lastStatusBadge.textContent = "Error";
   }
@@ -138,7 +144,6 @@ async function refreshLast5() {
 async function init() {
   renderMoves();
 
-  // Detectar IP pública del cliente y fijarla en solo lectura
   el.ip.value = "Detectando…";
   el.ip.setAttribute("readonly", "readonly");
   el.ip.value = await fetchPublicIP();
