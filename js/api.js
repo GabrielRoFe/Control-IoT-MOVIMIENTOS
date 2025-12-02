@@ -1,5 +1,7 @@
 // === Ajusta esta URL al host de tu backend Flask ===
-export const API_BASE_URL = "http://http://127.0.0.1:5000/api/iot-devices";
+// Local:     http://localhost:5000/api
+// Servidor:  http://TU_IP_PUBLICA:5000/api
+export const API_BASE_URL = "http://34.200.30.103:5000/api";
 
 async function apiGet(path) {
   const res = await fetch(`${API_BASE_URL}${path}`, { method: "GET", mode: "cors" });
@@ -12,16 +14,16 @@ async function apiPost(path, body) {
     method: "POST",
     mode: "cors",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
+    body: JSON.stringify(body)
   });
   if (!res.ok) throw new Error(await res.text() || `POST ${path} failed`);
   return res.json();
 }
 
-// Endpoints correctos según tu backend Flask
-export const getLast5 = () => apiGet("/last5");
-export const getLastStatusTexto = () => apiGet("/last-status-texto");
-export const insertStatus = (payload) => apiPost("/", payload);
+// Endpoints
+export const getLast5 = () => apiGet("/iot-devices/last5");
+export const getLastStatusTexto = () => apiGet("/iot-devices/last-status-texto");
+export const insertStatus = (payload) => apiPost("/iot-devices/", payload);
 
 // Obtener IP pública del cliente
 export async function fetchPublicIP() {
@@ -33,4 +35,3 @@ export async function fetchPublicIP() {
     return "0.0.0.0";
   }
 }
-
